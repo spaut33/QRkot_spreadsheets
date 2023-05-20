@@ -1,6 +1,6 @@
 # 😽 QRKot - Благотворительный фонд поддержки бездомных котиков
 
-<img alt="Python" src="https://img.shields.io/badge/Python-3.8-blue?style=flat&logo=python"> <img alt="Python" src="https://img.shields.io/badge/FastAPI-0.78-blue?style=flat&logo=fastapi">
+<img alt="Python" src="https://img.shields.io/badge/Python-3.9-blue?style=flat&logo=python"> <img alt="Python" src="https://img.shields.io/badge/FastAPI-0.78-blue?style=flat&logo=fastapi">
 
 ## Содержание
 
