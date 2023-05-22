@@ -1,7 +1,7 @@
 from typing import List, Dict, Any
 
 from aiogoogle import Aiogoogle
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.core.db import get_async_session
@@ -19,7 +19,7 @@ router = APIRouter()
 
 @router.post(
     '/',
-    response_model=List[Dict[str, Any]],
+    response_model=str,
     dependencies=[Depends(current_superuser)],
 )
 async def get_report(
@@ -30,7 +30,14 @@ async def get_report(
     projects = await charity_project_crud.get_projects_by_completion_rate(
         session
     )
-    spreadsheet_id = await spreadsheets_create(wrapper_services)
+    spreadsheet_id, spreadsheet_url = await spreadsheets_create(
+        wrapper_services
+    )
     await set_user_permissions(spreadsheet_id, wrapper_services)
-    await spreadsheets_update_value(spreadsheet_id, projects, wrapper_services)
-    return projects
+    try:
+        await spreadsheets_update_value(
+            spreadsheet_id, projects, wrapper_services
+        )
+    except ValueError as error:
+        raise HTTPException(status_code=400, detail=str(error))
+    return spreadsheet_url
